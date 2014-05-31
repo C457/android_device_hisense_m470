@@ -68,7 +68,8 @@ TARGET_KERNEL_SOURCE := kernel/hisense/m470
 # TARGET_KERNEL_CONFIG := dave_no_oc_cq_m470_defconfig
 TARGET_KERNEL_CONFIG := dave_no_overclock_m470_defconfig
 
-#TARGET_KERNEL_CUSTOM_TOOLCHAIN := arm-eabi-4.6
+# Releasetools
+TARGET_RELEASETOOLS_EXTENSIONS := device/hisense/m470
 
 
 # Bluetooth

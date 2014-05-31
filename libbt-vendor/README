@@ -1,1 +1,0 @@
-Go into hardware/broadcom/libbt and add line ifneq ($(TARGET_DEVICE),m470) and at end endif
