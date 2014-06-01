@@ -20,4 +20,8 @@
 #define BTM_DEF_LOCAL_NAME "Sero 7 Pro"
 #define BTA_DISABLE_DELAY 1000 /* in milliseconds */
 
+#define BLE_INCLUDED TRUE
+#define BTA_GATT_INCLUDED TRUE
+#define SMP_INCLUDED TRUE
+
 #endif
