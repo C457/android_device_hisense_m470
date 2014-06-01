@@ -63,9 +63,6 @@ BOARD_HAL_STATIC_LIBRARIES := \
 TARGET_PREBUILT_KERNEL := device/hisense/m470/prebuilt/kernel/kernel
 BOARD_KERNEL_CMDLINE := androidboot.selinux=enforce
 TARGET_KERNEL_SOURCE := kernel/hisense/m470
-# TARGET_KERNEL_CONFIG := dave_cpu_overclock_m470_defconfig
-# TARGET_KERNEL_CONFIG := dave_m470_defconfig
-# TARGET_KERNEL_CONFIG := dave_no_oc_cq_m470_defconfig
 TARGET_KERNEL_CONFIG := dave_no_overclock_m470_defconfig
 
 # Releasetools
