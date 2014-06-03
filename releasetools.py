@@ -52,4 +52,4 @@ def FullOTA_Assertions(info):
          'set_perm(0, 0, 0777, "/tmp/overrides");'))
 
 def FullOTA_InstallEnd(info):
-  info.script.AppendExtra('assert(run_program("cp", "-f", "/tmp/overrides/lib/libbt-vendor.so", "/system/vendor/lib/libbt-vendor.so") == 0);')
+  info.script.AppendExtra('assert(run_program("/sbin/busybox", "cp", "-f", "/tmp/overrides/lib/libbt-vendor.so", "/system/vendor/lib/libbt-vendor.so") == 0);')
