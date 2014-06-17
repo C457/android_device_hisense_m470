@@ -26,7 +26,7 @@ $(call inherit-product, device/hisense/m470/device.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
 
 # Discard inherited values and use our own instead.
-PRODUCT_NAME := cm_m470
+PRODUCT_NAME := carbon_m470
 PRODUCT_DEVICE := m470
 PRODUCT_BRAND := Hisense
 # Don't restrict vendor folder

@@ -6,17 +6,17 @@ TARGET_SCREEN_HEIGHT := 1280
 TARGET_SCREEN_WIDTH := 800
 
 # Inherit some common CM stuff.
-$(call inherit-product, vendor/cm/config/common_full_tablet_wifionly.mk)
+$(call inherit-product, vendor/carbon/config/common_tablet.mk)
 
 # Enhanced NFC
-$(call inherit-product, vendor/cm/config/nfc_enhanced.mk)
+#$(call inherit-product, vendor/carbon/config/nfc_enhanced.mk)
 
 # Inherit device configuration
 $(call inherit-product, device/hisense/m470/full_m470.mk)
 
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := m470
-PRODUCT_NAME := cm_m470
+PRODUCT_NAME := carbon_m470
 PRODUCT_BRAND := Hisense
 PRODUCT_MODEL := Sero 7 Pro
 PRODUCT_MANUFACTURER := Hisense
