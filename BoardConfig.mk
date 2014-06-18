@@ -62,7 +62,7 @@ BOARD_HAL_STATIC_LIBRARIES := \
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.selinux=enforce
 TARGET_KERNEL_SOURCE := kernel/hisense/m470
-TARGET_KERNEL_CONFIG := cyanogenmod_m470_defconfig
+TARGET_KERNEL_CONFIG := m470_v2_dopa1_defconfig
 
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/hisense/m470
