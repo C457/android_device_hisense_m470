@@ -64,6 +64,9 @@ BOARD_KERNEL_CMDLINE := androidboot.selinux=enforce
 TARGET_KERNEL_SOURCE := kernel/hisense/m470
 TARGET_KERNEL_CONFIG := m470_v2_dopa1_defconfig
 
+# External apps on SD
+TARGET_EXTERNAL_APPS = sdcard1
+
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/hisense/m470
 
