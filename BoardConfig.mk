@@ -109,6 +109,9 @@ RECOVERY_FSTAB_VERSION := 2
 TARGET_RECOVERY_FSTAB := device/hisense/m470/prebuilt/ramdisk/fstab.m470
 BOARD_RECOVERY_SWIPE := true
 
+#PhilZ
+BRIGHTNESS_SYS_FILE := /sys/devices/platform/pwm-backlight/backlight/pwm-backlight/brightness
+
 # Twrp
 DEVICE_RESOLUTION := 800x1280
 BOARD_HAS_NO_REAL_SDCARD := true
