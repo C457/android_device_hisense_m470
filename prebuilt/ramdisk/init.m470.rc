@@ -1,7 +1,11 @@
 import init.m470.usb.rc
 
 on early-init
-    write /sys/devices/system/cpu/cpuquiet/current_governor "userspace"
+    write /sys/devices/system/cpu/cpuquiet/current_governor "performance"
+
+    write /sys/devices/system/cpu/cpu1/online 0
+    write /sys/devices/system/cpu/cpu2/online 0
+    write /sys/devices/system/cpu/cpu3/online 0
 
 on init
     mkdir /mnt/shell/emulated 0700 shell shell
@@ -45,6 +49,7 @@ on fs
 
     mount ext4 /dev/block/platform/sdhci-tegra.3/by-name/THD /thirdparty wait rw
 
+
 on post-fs-data
     mkdir /data/misc/wifi/sockets 0770 wifi wifi
     mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
@@ -69,6 +74,11 @@ on charger
     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
 
 on boot
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor performance
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor performance
 
 # bluetooth
     # change back to bluetooth from system
@@ -187,59 +197,59 @@ on boot
     chown system system /sys/bus/iio/devices/iio:device0/buffer/length
     chown system system /sys/bus/iio/devices/iio:device0/buffer/enable
     chown system system /sys/bus/iio/devices/iio:device0/compass_enable
-chown system system /sys/bus/iio/devices/iio:device0/compass_matrix
-chown system system /sys/bus/iio/devices/iio:device0/dmp_event_int_on
-chown system system /sys/bus/iio/devices/iio:device0/dmp_firmware
-chown system system /sys/bus/iio/devices/iio:device0/dmp_int_on
-chown system system /sys/bus/iio/devices/iio:device0/dmp_on
-chown system system /sys/bus/iio/devices/iio:device0/dmp_output_rate
-chown system system /sys/bus/iio/devices/iio:device0/event_display_orientation
-chown system system /sys/bus/iio/devices/iio:device0/firmware_loaded
-chown system system /sys/bus/iio/devices/iio:device0/gyro_enable
-chown system system /sys/bus/iio/devices/iio:device0/gyro_matrix
-chown system system /sys/bus/iio/devices/iio:device0/in_accel_scale
-chown system system /sys/bus/iio/devices/iio:device0/in_anglvel_scale
-chown system system /sys/bus/iio/devices/iio:device0/in_magn_scale
-chown system system /sys/bus/iio/devices/iio:device0/key
-chown system system /sys/bus/iio/devices/iio:device0/power_state
-chown system system /sys/bus/iio/devices/iio:device0/quaternion_on
-chown system system /sys/bus/iio/devices/iio:device0/sampling_frequency
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_accel_x_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_accel_y_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_accel_z_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_anglvel_x_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_anglvel_y_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_anglvel_z_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_magn_x_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_magn_y_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_magn_z_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_quaternion_r_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_quaternion_x_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_quaternion_y_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_quaternion_z_en
-chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_timestamp_en
-chown system system /sys/bus/iio/devices/iio:device0/self_test
-chown system system /sys/bus/iio/devices/iio:device0/tap_on
-chown system system /sys/bus/iio/devices/iio:device0/temperature
-chown system system /sys/bus/iio/devices/iio:device0/trigger/current_trigger
-chown system system /sys/bus/iio/devices/iio:device0/in_anglvel_x_calibbias
-chown system system /sys/bus/iio/devices/iio:device0/in_anglvel_y_calibbias
-chown system system /sys/bus/iio/devices/iio:device0/in_anglvel_z_calibbias
-chown system system /sys/bus/iio/devices/iio:device0/in_accel_x_calibbias
-chown system system /sys/bus/iio/devices/iio:device0/in_accel_y_calibbias
-chown system system /sys/bus/iio/devices/iio:device0/in_accel_z_calibbias 
-chown system system /sys/bus/iio/devices/iio:device0/in_accel_x_offset
-chown system system /sys/bus/iio/devices/iio:device0/in_accel_y_offset
-chown system system /sys/bus/iio/devices/iio:device0/in_accel_z_offset
-
-chown system system /sys/bus/iio/devices/device0/als_ir_mode
-chown system system /sys/bus/iio/devices/device0/proximity_enable
+    chown system system /sys/bus/iio/devices/iio:device0/compass_matrix
+    chown system system /sys/bus/iio/devices/iio:device0/dmp_event_int_on
+    chown system system /sys/bus/iio/devices/iio:device0/dmp_firmware
+    chown system system /sys/bus/iio/devices/iio:device0/dmp_int_on
+    chown system system /sys/bus/iio/devices/iio:device0/dmp_on
+    chown system system /sys/bus/iio/devices/iio:device0/dmp_output_rate
+    chown system system /sys/bus/iio/devices/iio:device0/event_display_orientation
+    chown system system /sys/bus/iio/devices/iio:device0/firmware_loaded
+    chown system system /sys/bus/iio/devices/iio:device0/gyro_enable
+    chown system system /sys/bus/iio/devices/iio:device0/gyro_matrix
+    chown system system /sys/bus/iio/devices/iio:device0/in_accel_scale
+    chown system system /sys/bus/iio/devices/iio:device0/in_anglvel_scale
+    chown system system /sys/bus/iio/devices/iio:device0/in_magn_scale
+    chown system system /sys/bus/iio/devices/iio:device0/key
+    chown system system /sys/bus/iio/devices/iio:device0/power_state
+    chown system system /sys/bus/iio/devices/iio:device0/quaternion_on
+    chown system system /sys/bus/iio/devices/iio:device0/sampling_frequency
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_accel_x_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_accel_y_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_accel_z_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_anglvel_x_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_anglvel_y_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_anglvel_z_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_magn_x_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_magn_y_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_magn_z_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_quaternion_r_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_quaternion_x_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_quaternion_y_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_quaternion_z_en
+    chown system system /sys/bus/iio/devices/iio:device0/scan_elements/in_timestamp_en
+    chown system system /sys/bus/iio/devices/iio:device0/self_test
+    chown system system /sys/bus/iio/devices/iio:device0/tap_on
+    chown system system /sys/bus/iio/devices/iio:device0/temperature
+    chown system system /sys/bus/iio/devices/iio:device0/trigger/current_trigger
+    chown system system /sys/bus/iio/devices/iio:device0/in_anglvel_x_calibbias
+    chown system system /sys/bus/iio/devices/iio:device0/in_anglvel_y_calibbias
+    chown system system /sys/bus/iio/devices/iio:device0/in_anglvel_z_calibbias
+    chown system system /sys/bus/iio/devices/iio:device0/in_accel_x_calibbias
+    chown system system /sys/bus/iio/devices/iio:device0/in_accel_y_calibbias
+    chown system system /sys/bus/iio/devices/iio:device0/in_accel_z_calibbias 
+    chown system system /sys/bus/iio/devices/iio:device0/in_accel_x_offset
+    chown system system /sys/bus/iio/devices/iio:device0/in_accel_y_offset
+    chown system system /sys/bus/iio/devices/iio:device0/in_accel_z_offset
+    
+    chown system system /sys/bus/iio/devices/device0/als_ir_mode
+    chown system system /sys/bus/iio/devices/device0/proximity_enable
 # new nodes from linux kernel v3.4
-chown system system /sys/bus/iio/devices/iio:device0/als_ir_mode
-chown system system /sys/bus/iio/devices/iio:device0/proximity_enable
-insmod /system/lib/modules/mpu3050.ko
-insmod /system/lib/modules/inv_mpu_kxtf9.ko
-insmod /system/lib/modules/inv_mpu_ak8975.ko
+    chown system system /sys/bus/iio/devices/iio:device0/als_ir_mode
+    chown system system /sys/bus/iio/devices/iio:device0/proximity_enable
+    insmod /system/lib/modules/mpu3050.ko
+    insmod /system/lib/modules/inv_mpu_kxtf9.ko
+    insmod /system/lib/modules/inv_mpu_ak8975.ko
 
 # BB remote file system
     mkdir /data/rfs
@@ -265,49 +275,18 @@ insmod /system/lib/modules/inv_mpu_ak8975.ko
     chown radio system /sys/class/gpio/gpio32/value
     chown radio system /sys/devices/platform/tegra_usb_modem_power/load_host
 
-# Power management settings
-     write /sys/module/cpu_tegra3/parameters/no_lp 0
 
-     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor conservative
-     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor conservative
-     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor conservative
-     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor conservative
-
-     write /sys/devices/system/cpu/cpufreq/conservative/up_threshold 95
-     write /sys/devices/system/cpu/cpufreq/conservative/down_threshold 75
-     write /sys/devices/system/cpu/cpufreq/conservative/freq_step 3
-
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
-    write /sys/devices/system/cpu/cpufreq/interactive/boost_factor 2
-    write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 80
-    write /sys/module/cpu_tegra3/parameters/auto_hotplug 1
-    write /sys/module/cpuidle/parameters/lp2_in_idle 1
     chown system system /sys/devices/system/cpu/cpufreq/interactive/go_maxspeed_load
     chown system system /sys/devices/system/cpu/cpufreq/interactive/max_boost
     chown system system /sys/devices/system/cpu/cpufreq/interactive/boost_factor
 
-# Increase read ahead size of mmc block devices from default(128) to 4MB
-# Reduces power comsuption during video playback from sdcards
-    write /sys/block/mmcblk0/queue/read_ahead_kb 4096
-    write /sys/block/mmcblk1/queue/read_ahead_kb 4096
-    write /sys/block/mmcblk0/bdi/read_ahead_kb   4096
-    write /sys/block/mmcblk1/bdi/read_ahead_kb   4096
 
 # USB On The Go - Host Mode
     chown system system /sys/devices/platform/tegra-otg/enable_host
 
 # GPS init
-    write /sys/class/gpio/export 120
-    write /sys/class/gpio/gpio120/value 0
-    write /sys/class/gpio/gpio120/direction out
     chown gps system /sys/class/gpio/gpio120/value
     chmod 0644 /sys/class/gpio/gpio120/value
-    write /sys/class/gpio/export 135
-    write /sys/class/gpio/gpio135/direction out
-    write /sys/class/gpio/gpio135/value 1
     chown gps system /sys/class/gpio/gpio135/value
     chmod 0664 /sys/class/gpio/gpio135/value
     mkdir /data/gps/
@@ -444,3 +423,35 @@ service nvcpud /system/bin/nvcpud
 
 on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpuquiet/current_governor "runnable"
+
+# Power management settings
+    write /sys/module/cpu_tegra3/parameters/no_lp 0
+
+    write /sys/devices/system/cpu/cpufreq/conservative/up_threshold 95
+    write /sys/devices/system/cpu/cpufreq/conservative/down_threshold 75
+    write /sys/devices/system/cpu/cpufreq/conservative/freq_step 3
+
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpufreq/interactive/boost_factor 2
+    write /sys/devices/system/cpu/cpufreq/interactive/sustain_load 80
+    write /sys/module/cpu_tegra3/parameters/auto_hotplug 1
+    write /sys/module/cpuidle/parameters/lp2_in_idle 1
+
+
+# Increase read ahead size of mmc block devices from default(128) to 4MB
+# Reduces power comsuption during video playback from sdcards
+    write /sys/block/mmcblk0/queue/read_ahead_kb 4096
+    write /sys/block/mmcblk1/queue/read_ahead_kb 4096
+    write /sys/block/mmcblk0/bdi/read_ahead_kb   4096
+    write /sys/block/mmcblk1/bdi/read_ahead_kb   4096
+
+# GPS Init
+    write /sys/class/gpio/export 120
+    write /sys/class/gpio/gpio120/value 0
+    write /sys/class/gpio/gpio120/direction out
+    write /sys/class/gpio/export 135
+    write /sys/class/gpio/gpio135/direction out
+    write /sys/class/gpio/gpio135/value 1
