@@ -3,6 +3,9 @@ import init.m470.usb.rc
 on early-init
     write /sys/devices/system/cpu/cpuquiet/current_governor "performance"
 
+    chmod 666 /sys/devices/system/cpu/cpu1/online
+    chmod 666 /sys/devices/system/cpu/cpu2/online
+    chmod 666 /sys/devices/system/cpu/cpu3/online
     write /sys/devices/system/cpu/cpu1/online 0
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
