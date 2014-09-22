@@ -1,0 +1,52 @@
+diff --git a/services/java/com/android/server/pm/PackageManagerService.java b/services/java/com/android/server/pm/PackageManagerService.java
+index 7549269..105b3db 100644
+--- a/services/java/com/android/server/pm/PackageManagerService.java
++++ b/services/java/com/android/server/pm/PackageManagerService.java
+@@ -4063,6 +4063,25 @@ public class PackageManagerService extends IPackageManager.Stub {
+             final AtomicInteger i = new AtomicInteger(0);
+             final int pkgsSize = pkgs.size();
+             ExecutorService executorService = Executors.newFixedThreadPool(sNThreads);
++	    FileOutputStream cpu1_online = null;
++            FileOutputStream cpu2_online = null;
++	    FileOutputStream cpu3_online = null;
++
++            try{
++		if(mIsMultiThreaded) {
++			cpu1_online = new FileOutputStream("/sys/devices/system/cpu/cpu1/online");
++			cpu2_online = new FileOutputStream("/sys/devices/system/cpu/cpu2/online");
++			cpu3_online = new FileOutputStream("/sys/devices/system/cpu/cpu3/online");
++			Log.i("MultiThreaded-MultiCore dexopt:", "Bringing up CPU 2|3|4");
++			cpu1_online.write((byte)49);
++			cpu1_online.close();
++			cpu2_online.write((byte)49);
++			cpu2_online.close();
++			cpu3_online.write((byte)49);
++			cpu3_online.close();
++			Log.i("MultiThreaded-MultiCore dexopt:", "Bringing up CPU 2|3|4 success!");
++    		}
++ 	    }catch (Exception ex){ex.printStackTrace();}
+             for (PackageParser.Package pkg : pkgs) {
+                 final PackageParser.Package p = pkg;
+                 synchronized (mInstallLock) {
+@@ -4094,6 +4113,21 @@ public class PackageManagerService extends IPackageManager.Stub {
+             executorService.shutdown();
+             try {
+                 executorService.awaitTermination(1, TimeUnit.DAYS);
++	            try{
++			if(mIsMultiThreaded) {
++				cpu1_online = new FileOutputStream("/sys/devices/system/cpu/cpu1/online");
++				cpu2_online = new FileOutputStream("/sys/devices/system/cpu/cpu2/online");
++				cpu3_online = new FileOutputStream("/sys/devices/system/cpu/cpu3/online");
++				Log.i("MultiThreaded-MultiCore dexopt:", "Bringing down CPU 2|3|4");
++				cpu1_online.write((byte)48);
++				cpu1_online.close();
++				cpu2_online.write((byte)48);
++				cpu2_online.close();
++				cpu3_online.write((byte)48);
++				cpu3_online.close();
++				Log.i("MultiThreaded-MultiCore dexopt:", "Bringing down CPU 2|3|4 success!");
++	    		}
++	 	    }catch (Exception ex){ex.printStackTrace();}
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             }
