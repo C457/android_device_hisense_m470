@@ -23,7 +23,8 @@ PRODUCT_PROPERTY_OVERRIDES := \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=15 \
     tf.enable=true \
-    drm.service.enabled=true
+    drm.service.enabled=true \
+    persist.sys.dalvik.multithread=true
 
 # Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
