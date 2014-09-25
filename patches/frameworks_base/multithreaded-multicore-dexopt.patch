@@ -1,39 +1,29 @@
 diff --git a/services/java/com/android/server/pm/PackageManagerService.java b/services/java/com/android/server/pm/PackageManagerService.java
-index 220bec0..77410d2 100644
+index 220bec0..6dd2df9 100644
 --- a/services/java/com/android/server/pm/PackageManagerService.java
 +++ b/services/java/com/android/server/pm/PackageManagerService.java
-@@ -510,6 +510,42 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -510,6 +510,96 @@ public class PackageManagerService extends IPackageManager.Stub {
  
      private Map<String, Long> mAvailableCommonResources = new HashMap<String, Long>();
  
-+    private static void extraCPUCores(boolean enable) {
++    private static boolean[] cpu_prev_state = new boolean[3];
 +
-+	String path_start = "/sys/devices/system/cpu/cpu";
++    private static void recordCPUStates() {
++
++    	String path_start = "/sys/devices/system/cpu/cpu";
 +        String path_tail = "/online";
-+	String word = "down";
-+	byte zeroorone = (byte)48;
-+     
-+        if(enable){
-+		zeroorone = (byte)49;
-+		word = "up";
-+	}
 +
 +        try{
 +
 +		for(int i = 1; i < 4; i ++) {
 +			File cpu_online = new File(path_start + String.valueOf(i) + path_tail);
-+			if(cpu_online.exists() && cpu_online.canWrite()){
-+				FileOutputStream cpu_online_stream = new FileOutputStream(cpu_online);
-+				Log.i("MultiThreaded-MultiCore dexopt:", "Bringing " + 
-+					word +" CPU " + String.valueOf(i));
-+				cpu_online_stream.write(zeroorone);
-+				cpu_online_stream.close();
-+				Log.i("MultiThreaded-MultiCore dexopt:", "Bringing " + 
-+					word +" CPU " + String.valueOf(i) + " success!");
-+			} else {
-+				Log.e("MultiThreaded-MultiCore dexopt:", "Error writing to " + 
-+					cpu_online.getAbsoluteFile());
-+				break;
++			if(cpu_online.exists() && cpu_online.canRead()){
++				FileInputStream fis = new FileInputStream(cpu_online);
++				int state = fis.read();
++				Log.i("MultiThreaded-MultiCore dexopt:", "CPU "+ String.valueOf(i) +" record state=" + 
++					String.valueOf(state));
++				fis.close();
++				cpu_prev_state[i -1] = (state == 49);
 +			}
 +		}
 +
@@ -41,20 +31,85 @@ index 220bec0..77410d2 100644
 +
 +    }
 +
++    private static void restoreCPUStates() {
++
++    	String path_start = "/sys/devices/system/cpu/cpu";
++        String path_tail = "/online";
++
++        try{
++
++		for(int i = 1; i < 4; i ++) {
++			File cpu_online = new File(path_start + String.valueOf(i) + path_tail);
++			if(cpu_online.exists() && cpu_online.canWrite()){
++				FileOutputStream fos = new FileOutputStream(cpu_online);
++				if(cpu_prev_state[i -1]){
++					Log.i("MultiThreaded-MultiCore dexopt:", "Bringing " + 
++						"up" +" CPU " + String.valueOf(i));
++					fos.write((byte)49);
++				} else {
++					Log.i("MultiThreaded-MultiCore dexopt:", "Bringing " + 
++						"down" +" CPU " + String.valueOf(i));
++					fos.write((byte)48);
++				}
++
++				Log.i("MultiThreaded-MultiCore dexopt:", " restore state=" + 
++					String.valueOf(cpu_prev_state[i -1]));
++				fos.close();
++			}
++		}
++
++       }catch (Exception ex){ex.printStackTrace();}
++
++    }
++
++    private static void enableAllCores() {
++
++	String path_start = "/sys/devices/system/cpu/cpu";
++        String path_tail = "/online";
++
++        try{
++
++		for(int i = 1; i < 4; i ++) {
++			File cpu_online = new File(path_start + String.valueOf(i) + path_tail);
++			if(cpu_online.exists() && cpu_online.canWrite()){
++				FileOutputStream fos = new FileOutputStream(cpu_online);
++				Log.i("MultiThreaded-MultiCore dexopt:", "Bringing " + 
++					"up" +" CPU " + String.valueOf(i));
++				fos.write((byte)49);
++				fos.close();
++			}
++		}
++
++       }catch (Exception ex){ex.printStackTrace();}
++
++    }
++
++    private static void extraCPUCores(boolean enable) {
++
++	if(enable) {
++		recordCPUStates();
++		enableAllCores();
++	} else {
++		restoreCPUStates();
++	}
++
++    }
++
 +
      // Set of pending broadcasts for aggregating enable/disable of components.
      static class PendingPackageBroadcasts {
          // for each user id, a map of <package name -> components within that package>
-@@ -1167,6 +1203,8 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -1166,7 +1256,8 @@ public class PackageManagerService extends IPackageManager.Stub {
+             Slog.w(TAG, "**** ro.build.version.sdk not set!");
          }
  
-         mIsMultiThreaded = !"false".equals(SystemProperties.get("persist.sys.dalvik.multithread"));
+-        mIsMultiThreaded = !"false".equals(SystemProperties.get("persist.sys.dalvik.multithread"));
 +        /* Overide! Let's always use this! */
-+        mIsMultiThreaded = true;
++        mIsMultiThreaded = (Runtime.getRuntime().availableProcessors() > 1);
  
          mContext = context;
          mFactoryTest = factoryTest;
-@@ -1287,7 +1325,10 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -1287,7 +1378,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                   */
                  if (mSharedLibraries.size() > 0) {
                      Iterator<SharedLibraryEntry> libs = mSharedLibraries.values().iterator();
@@ -66,7 +121,7 @@ index 220bec0..77410d2 100644
                      while (libs.hasNext()) {
                          final String lib = libs.next().path;
                          if (lib == null) {
-@@ -1319,6 +1360,9 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -1319,6 +1413,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                      executorService.shutdown();
                      try {
                          executorService.awaitTermination(1, TimeUnit.DAYS);
@@ -76,7 +131,7 @@ index 220bec0..77410d2 100644
                      } catch (InterruptedException e) {
                          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                      }
-@@ -1342,7 +1386,10 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -1342,7 +1439,10 @@ public class PackageManagerService extends IPackageManager.Stub {
                   */
                  String[] frameworkFiles = frameworkDir.list();
                  if (frameworkFiles != null) {
@@ -88,7 +143,7 @@ index 220bec0..77410d2 100644
                      for (int i = 0; i < frameworkFiles.length; i++) {
                          File libPath = new File(frameworkDir, frameworkFiles[i]);
                          final String path = libPath.getPath();
-@@ -1378,6 +1425,9 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -1378,6 +1478,9 @@ public class PackageManagerService extends IPackageManager.Stub {
                      executorService.shutdown();
                      try {
                          executorService.awaitTermination(1, TimeUnit.DAYS);
@@ -98,7 +153,7 @@ index 220bec0..77410d2 100644
                      } catch (InterruptedException e) {
                          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                      }
-@@ -3720,8 +3770,10 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -3720,8 +3823,10 @@ public class PackageManagerService extends IPackageManager.Stub {
              return;
          }
  
@@ -110,7 +165,7 @@ index 220bec0..77410d2 100644
          if (DEBUG_PACKAGE_SCANNING) {
              Log.d(TAG, "Scanning app dir " + dir + " scanMode=" + scanMode
                      + " flags=0x" + Integer.toHexString(flags));
-@@ -3757,6 +3809,9 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -3757,6 +3862,9 @@ public class PackageManagerService extends IPackageManager.Stub {
          executorService.shutdown();
          try {
              executorService.awaitTermination(1, TimeUnit.DAYS);
@@ -120,7 +175,7 @@ index 220bec0..77410d2 100644
          } catch (InterruptedException e) {
              e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
          }
-@@ -4090,7 +4145,10 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -4090,7 +4198,10 @@ public class PackageManagerService extends IPackageManager.Stub {
          if (pkgs != null) {
              final AtomicInteger i = new AtomicInteger(0);
              final int pkgsSize = pkgs.size();
@@ -132,7 +187,7 @@ index 220bec0..77410d2 100644
              for (PackageParser.Package pkg : pkgs) {
                  final PackageParser.Package p = pkg;
                  synchronized (mInstallLock) {
-@@ -4122,6 +4180,9 @@ public class PackageManagerService extends IPackageManager.Stub {
+@@ -4122,6 +4233,9 @@ public class PackageManagerService extends IPackageManager.Stub {
              executorService.shutdown();
              try {
                  executorService.awaitTermination(1, TimeUnit.DAYS);
