@@ -37,6 +37,7 @@ PRODUCT_COPY_FILES += \
     device/hisense/m470/prebuilt/ramdisk/init.m470.rc:root/init.m470.rc \
     device/hisense/m470/prebuilt/ramdisk/init.m470.usb.rc:root/init.m470.usb.rc \
     device/hisense/m470/prebuilt/ramdisk/init.tf.rc:root/init.tf.rc \
+    device/hisense/m470/prebuilt/ramdisk/lpm.rc:root/lpm.rc \
     device/hisense/m470/prebuilt/ramdisk/ueventd.m470.rc:root/ueventd.m470.rc \
     device/hisense/m470/prebuilt/ramdisk/twrp.fstab:recovery/root/etc/twrp.fstab \
     device/hisense/m470/prebuilt/ramdisk/twrp.fstab:recovery/root/etc/extra.fstab

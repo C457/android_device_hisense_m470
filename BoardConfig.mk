@@ -122,6 +122,11 @@ TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
 # Hardware overlay
 BOARD_HARDWARE_CLASS := device/hisense/m470/cmhw/
 
+# Charging mode
+BOARD_CHARGER_ENABLE_SUSPEND := false
+BOARD_CHARGER_DISABLE_INIT_BLANK := false
+BOARD_CHARGER_CUSTOM_BACKLIGHT_PATH := /sys/class/backlight/pwm-backlight/brightness
+
 # Selinux
 BOARD_SEPOLICY_DIRS := \
         device/hisense/m470/sepolicy
@@ -141,6 +146,4 @@ BOARD_SEPOLICY_UNION := \
         surfaceflinger.te \
         system.te \
         zygote.te
-
-BOARD_CHARGER_ENABLE_SUSPEND := true
 
