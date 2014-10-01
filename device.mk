@@ -171,4 +171,3 @@ PRODUCT_COPY_FILES += \
 DEVICE_PACKAGE_OVERLAYS := \
     device/hisense/m470/overlay
 
-$(call inherit-product, frameworks/base/data/sounds/AudioPackage10.mk)
