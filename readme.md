@@ -78,7 +78,7 @@ cd /home/$USER/carbon/device/hisense/m470
 ./patch.sh
 ```
 
-NOTE: Now you have everything that you need to build Beastalk for your Hisense Sero 7 Pro. Build times depend on you PC performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
+NOTE: Now you have everything that you need to build Carbon ROM for your Hisense Sero 7 Pro. Build times depend on you PC performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
 
 NOTE: It may take anywhere from 5 hours to 15 hours depending on system specs for a complete build.
 Execute the following commands in a linux terminal:
