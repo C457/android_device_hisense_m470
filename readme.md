@@ -50,15 +50,16 @@ The local manifest is different for every device. It contains those repos that a
 
 Execute the following commands in a linux terminal:
 ```bash
+mkdir /home/$USER/carbon/.repo/local_manifests 
 gedit /home/$USER/carbon/.repo/local_manifests/sero7pro.xml
 ```
 Now copy the following into sero7pro.xml, save and close.
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <project name="Meticulus/android_device_hisense_m470" path="device/hisense/m470" remote="github" revision="kk44"/>
-  <project name="Meticulus/android_kernel_hisense_m470" path="kernel/hisense/m470" remote="github" revision="kk44"/>
-  <project name="Meticulus/android_vendor_hisense" path="vendor/hisense" remote="github" revision="kk44"/>
+  <project name="Meticulus/android_device_hisense_m470" path="device/hisense/m470" remote="cm" revision="kk44"/>
+  <project name="Meticulus/android_kernel_hisense_m470" path="kernel/hisense/m470" remote="cm" revision="kk44"/>
+  <project name="Meticulus/android_vendor_hisense" path="vendor/hisense" remote="cm" revision="kk44"/>
 </manifest>
 ```
 Execute the following commands in a linux terminal:
