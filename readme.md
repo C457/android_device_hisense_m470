@@ -1,4 +1,4 @@
-# Carbon ROM for the Hisense Sero 7 Pro (m470)
+# Carbon ROM (KitKat) for the Hisense Sero 7 Pro (m470)
 
 ### Kernel
 This device tree is intended to be used with this kernel repo
@@ -16,7 +16,7 @@ branch: kk44
 
 ### Step 1: Setting up the Build Environment.
 
-You'll need Linux to be able to build Beanstalk. You have three choices here; you can:
+You'll need Linux to be able to build Carbon ROM. You have three choices here; you can:
 
 1. Install Linux natively on your computer.
 2. Dual boot Linux and Windows.
@@ -33,7 +33,7 @@ NOTE: Read through the topics here as well: http://wiki.cyanogenmod.org/w/Develo
 
 NOTE: Some say that it is better to download the ROM source and put in your local manifest later. I don't know if that's best but that's what we are going to do.
 
-BEFORE YOU BEGIN: You are about to start downloading 5 - 15 Gigs of data. That could take a very long time, so plan accordingly. I like to start juts before I go to sleep and let it go overnight! If you have to work, perhaps start it before work and let it go through out the day.
+BEFORE YOU BEGIN: You are about to start downloading 5 - 15 Gigs of data. That could take a very long time, so plan accordingly. I like to start just before I go to sleep and let it go overnight! If you have to work, perhaps start it before work and let it go through out the day.
 
 Execute the following commands in a linux terminal:
 ```bash
@@ -43,8 +43,6 @@ repo init -u https://github.com/CarbonDev/android.git -b kk
 repo sync
 ```
 WARNING: There may be times, towards the end when it seem like, the download is stuck and not making any progress because there are no updates on the screen. BE PATIENT!, open a program that will show how much bandwidth you are using to be sure!
-
-NOTE: Steps 3 and 4 are from Scott's repo here: https://github.com/scotthartbti/android/tree/kk44.
 
 ### Step 3: Set up local manifest.
 
@@ -61,7 +59,6 @@ Now copy the following into sero7pro.xml, save and close.
   <project name="Meticulus/android_device_hisense_m470" path="device/hisense/m470" remote="github" revision="kk44"/>
   <project name="Meticulus/android_kernel_hisense_m470" path="kernel/hisense/m470" remote="github" revision="kk44"/>
   <project name="Meticulus/android_vendor_hisense" path="vendor/hisense" remote="github" revision="kk44"/>
-  <project name="Cyanogenmod/android_system_bluetooth" path="system/bluetooth" remote="github" revision="cm-10.2"/>
 </manifest>
 ```
 Execute the following commands in a linux terminal:
@@ -81,7 +78,7 @@ cd /home/$USER/carbon/device/hisense/m470
 ./patch.sh
 ```
 
-NOTE: Now you have everything that you need to build Beastalk for your Hisense Sero 7 Pro. Build times depend on you PC performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
+NOTE: Now you have everything that you need to build Carbon ROM for your Hisense Sero 7 Pro. Build times depend on you PC performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
 
 NOTE: It may take anywhere from 5 hours to 15 hours depending on system specs for a complete build.
 Execute the following commands in a linux terminal:
