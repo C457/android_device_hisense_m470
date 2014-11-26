@@ -21,3 +21,4 @@
 # function: add_lunch_combo generic-eng
 
 add_lunch_combo carbon_m470-userdebug
+add_lunch_combo cm_m470-eng
