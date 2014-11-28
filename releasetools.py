@@ -42,14 +42,14 @@ def FullOTA_Assertions(info):
 
   if os.path.isdir(os.path.join(TARGET_DIR, "overrides")):
   	addFolderToZip(info, os.path.join(TARGET_DIR, "overrides"),"overrides")
+     
+        info.script.AppendExtra(
+        ('package_extract_dir("overrides", "/tmp/overrides");\n'
+         'set_perm(0, 0, 0777, "/tmp/overrides");'))
+
   else :
 	print "Warning!: No override files found!"
 	time.sleep(2)
 
-
-  info.script.AppendExtra(
-        ('package_extract_dir("overrides", "/tmp/overrides");\n'
-         'set_perm(0, 0, 0777, "/tmp/overrides");'))
-
-def FullOTA_InstallEnd(info):
-  info.script.AppendExtra('assert(run_program("/sbin/busybox", "cp", "-f", "/tmp/overrides/lib/libbt-vendor.so", "/system/vendor/lib/libbt-vendor.so") == 0);')
+#def FullOTA_InstallEnd(info):
+#  info.script.AppendExtra('assert(run_program("/sbin/busybox", "cp", "-f", "/tmp/overrides/lib/libbt-vendor.so", "/system/vendor/lib/libbt-vendor.so") == 0);')
