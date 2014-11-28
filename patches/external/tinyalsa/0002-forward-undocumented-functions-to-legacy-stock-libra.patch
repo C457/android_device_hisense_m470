@@ -1,0 +1,89 @@
+From ede4e1cb8977e403dbfeaf08df56aa89de33f5d1 Mon Sep 17 00:00:00 2001
+From: DoloresPark <dolorespark@e-vertise.com>
+Date: Thu, 20 Nov 2014 23:21:50 -0500
+Subject: [PATCH] forward undocumented functions to legacy (stock) library
+
+---
+ Android.mk |    2 +-
+ mixer.c    |   48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 49 insertions(+), 1 deletion(-)
+
+diff --git a/Android.mk b/Android.mk
+index 006e588..b3a4048 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
+ LOCAL_C_INCLUDES:= external/tinyalsa/include
+ LOCAL_SRC_FILES:= mixer.c pcm.c
+ LOCAL_MODULE := libtinyalsa
+-LOCAL_SHARED_LIBRARIES:= libcutils libutils
++LOCAL_SHARED_LIBRARIES:= libcutils libutils libdl
+ LOCAL_MODULE_TAGS := optional
+ LOCAL_PRELINK_MODULE := false
+ 
+diff --git a/mixer.c b/mixer.c
+index 54d826e..fafcbde 100644
+--- a/mixer.c
++++ b/mixer.c
+@@ -33,6 +33,10 @@
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <ctype.h>
++#include <dlfcn.h>
++
++#define LOG_TAG "libtinyalsa"
++#include <log/log.h>
+ 
+ #include <sys/ioctl.h>
+ 
+@@ -527,3 +531,47 @@ int snd_card_get_card_id_from_sub_string(const char *card_name)
+     }
+     return -EINVAL;
+ }
++
++/* DoPa (20141118) - these are undocumented functions whose actual signature
++ * is unknown.  Calls are forwarded to the vendor's version of this lib
++ * using a best-guess at the correct signature.
++*/
++int mixer_ctl_get_iec958(void* x, void* y, void* z) {
++    static int (*get_iec958)(void*, void*, void*) = 0;
++
++    ALOGW("mixer_ctl_get_iec958\n");
++
++    if (!get_iec958) {
++        void *  handle;
++        dlerror();
++        handle = dlopen("libtinyalsa-legacy.so", RTLD_LAZY);
++        if (handle)
++            *(void **) (&get_iec958) = dlsym(handle, "mixer_ctl_get_iec958");
++        if (!get_iec958) {
++            ALOGE("mixer_ctl_get_iec958 error: %s\n", dlerror());
++            return 0;
++        }
++    }
++
++    return get_iec958(x, y, z);
++}
++
++int mixer_ctl_set_iec958(void* x, void* y, void* z) {
++    static int (*set_iec958)(void*, void*, void*) = 0;
++
++    ALOGW("mixer_ctl_set_iec958\n");
++
++    if (!set_iec958) {
++        void *  handle;
++        dlerror();
++        handle = dlopen("libtinyalsa-legacy.so", RTLD_LAZY);
++        if (handle)
++            *(void **) (&set_iec958) = dlsym(handle, "mixer_ctl_set_iec958");
++        if (!set_iec958) {
++            ALOGE("mixer_ctl_set_iec958 error: %s\n", dlerror());
++            return 0;
++        }
++    }
++
++    return set_iec958(x, y, z);
++}
+-- 
+1.7.9.5
+

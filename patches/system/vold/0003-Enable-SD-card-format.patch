@@ -1,0 +1,32 @@
+From d685b02f623e1c06da7f42b17b1b41a4913c336c Mon Sep 17 00:00:00 2001
+From: Bogdan George Stefan <bogdan.g.stefan@intel.com>
+Date: Mon, 30 Jun 2014 15:40:03 +0300
+Subject: [PATCH] Enable SD card format
+
+When an SD card has no MBR it cannot be formatted
+and then mounted by Android. This is because
+the device node was incremented by one by mistake
+when building the device path
+
+Change-Id: I8533c6028151fe28246e74f89a294c1e58e79438
+Signed-off-by: Bogdan George Stefan <bogdan.g.stefan@intel.com>
+---
+ Volume.cpp |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Volume.cpp b/Volume.cpp
+index bb47c4d..4cc61f1 100644
+--- a/Volume.cpp
++++ b/Volume.cpp
+@@ -276,7 +276,7 @@ int Volume::formatVol(bool wipe, const char* fstype) {
+     dev_t diskNode = getDiskDevice();
+     dev_t partNode =
+         MKDEV(MAJOR(diskNode),
+-              MINOR(diskNode) + (formatEntireDevice ? 1 : mPartIdx));
++              MINOR(diskNode) + (formatEntireDevice ? 0 : mPartIdx));
+ 
+     setState(Volume::State_Formatting);
+ 
+-- 
+1.7.9.5
+

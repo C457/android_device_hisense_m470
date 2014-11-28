@@ -1,0 +1,29 @@
+From 9bbfcea2e0d266071112e56ad1230616e2845fe9 Mon Sep 17 00:00:00 2001
+From: DoloresPark <dolorespark@e-vertise.com>
+Date: Wed, 25 Jun 2014 23:55:12 -0400
+Subject: [PATCH] fix hotword detection (i.e. 'OK Google')
+
+---
+ media/libmedia/AudioRecord.cpp |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/media/libmedia/AudioRecord.cpp b/media/libmedia/AudioRecord.cpp
+index 9e7ba88..edbc419 100644
+--- a/media/libmedia/AudioRecord.cpp
++++ b/media/libmedia/AudioRecord.cpp
+@@ -165,7 +165,11 @@ status_t AudioRecord::set(
+     }
+ 
+     // handle default values first.
+-    if (inputSource == AUDIO_SOURCE_DEFAULT) {
++    // DoPa (20140624) - 'audio_policy.tegra.so' doesn't support AUDIO_SOURCE_HOTWORD,
++    // so change inputSource to AUDIO_SOURCE_MIC at the native level which doesn't differentiate
++    // between the two but leave it as-is in the higher-level Java code which does
++    if (inputSource == AUDIO_SOURCE_DEFAULT ||
++        inputSource == AUDIO_SOURCE_HOTWORD) {
+         inputSource = AUDIO_SOURCE_MIC;
+     }
+     mInputSource = inputSource;
+-- 
+1.7.9.5
+

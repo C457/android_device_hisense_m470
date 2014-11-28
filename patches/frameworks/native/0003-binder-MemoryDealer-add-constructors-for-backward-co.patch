@@ -1,0 +1,54 @@
+From 4cc18a9c3d8fa7896b4f75caf7a44be4492f582f Mon Sep 17 00:00:00 2001
+From: DoloresPark <dolorespark@e-vertise.com>
+Date: Tue, 18 Nov 2014 18:37:55 -0500
+Subject: [PATCH] binder/MemoryDealer: add constructors for backward
+ compatibility
+
+---
+ include/binder/MemoryDealer.h |    6 ++++--
+ libs/binder/MemoryDealer.cpp  |   12 ++++++++++++
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/include/binder/MemoryDealer.h b/include/binder/MemoryDealer.h
+index aa415d5..2ba5e8c 100644
+--- a/include/binder/MemoryDealer.h
++++ b/include/binder/MemoryDealer.h
+@@ -34,8 +34,10 @@ class SimpleBestFitAllocator;
+ class MemoryDealer : public RefBase
+ {
+ public:
+-    MemoryDealer(size_t size, const char* name = 0,
+-            uint32_t flags = 0 /* or bits such as MemoryHeapBase::READ_ONLY */ );
++    MemoryDealer(size_t size);
++    MemoryDealer(size_t size, const char* name);
++    MemoryDealer(size_t size, const char* name, uint32_t flags
++    /* or bits such as MemoryHeapBase::READ_ONLY */ );
+ 
+     virtual sp<IMemory> allocate(size_t size);
+     virtual void        deallocate(size_t offset);
+diff --git a/libs/binder/MemoryDealer.cpp b/libs/binder/MemoryDealer.cpp
+index 8739625..5d8ab25 100644
+--- a/libs/binder/MemoryDealer.cpp
++++ b/libs/binder/MemoryDealer.cpp
+@@ -231,6 +231,18 @@ MemoryDealer::MemoryDealer(size_t size, const char* name, uint32_t flags)
+ {    
+ }
+ 
++MemoryDealer::MemoryDealer(size_t size, const char* name)
++    : mHeap(new MemoryHeapBase(size, 0, name)),
++    mAllocator(new SimpleBestFitAllocator(size))
++{    
++}
++
++MemoryDealer::MemoryDealer(size_t size)
++    : mHeap(new MemoryHeapBase(size, 0, 0)),
++    mAllocator(new SimpleBestFitAllocator(size))
++{    
++}
++
+ MemoryDealer::~MemoryDealer()
+ {
+     delete mAllocator;
+-- 
+1.7.9.5
+

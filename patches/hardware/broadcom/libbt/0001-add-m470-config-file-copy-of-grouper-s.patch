@@ -1,0 +1,29 @@
+From 24388d09c3e587d43c16ae8fe152ec679d3c712a Mon Sep 17 00:00:00 2001
+From: DoloresPark <dolorespark@e-vertise.com>
+Date: Tue, 18 Nov 2014 18:51:14 -0500
+Subject: [PATCH] add m470 config file (copy of grouper's)
+
+---
+ include/vnd_m470.txt |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ create mode 100755 include/vnd_m470.txt
+
+diff --git a/include/vnd_m470.txt b/include/vnd_m470.txt
+new file mode 100755
+index 0000000..3e4d71c
+--- /dev/null
++++ b/include/vnd_m470.txt
+@@ -0,0 +1,10 @@
++BLUETOOTH_UART_DEVICE_PORT = "/dev/ttyHS2"
++FW_PATCHFILE_LOCATION = "/etc/firmware/"
++BT_WAKE_VIA_PROC = TRUE
++LPM_IDLE_TIMEOUT_MULTIPLE = 5
++BTVND_DBG = FALSE
++BTHW_DBG = TRUE
++VNDUSERIAL_DBG = FALSE
++UPIO_DBG = FALSE
++SCO_PCM_IF_CLOCK_RATE = 2
++USE_CONTROLLER_BDADDR = TRUE
+-- 
+1.7.9.5
+
